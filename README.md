@@ -14,7 +14,7 @@ Supercharge your coding with AI-powered assistance! Automatically write new code
 - **[Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=timkmecl.chatgpt)**
 - **[Github Repository](https://github.com/timkmecl/chatgpt-vscode)**
 
-<br>
+<br/>
 
 
 
@@ -152,7 +152,9 @@ Please note that this extension is currently a proof of concept and may have som
 If you enjoy this extension, please consider [buying me a coffee ☕️](https://www.buymeacoffee.com/timkmecl) to support my work! 
 
 
-<a href="https://www.buymeacoffee.com/timkmecl" target="_blank"><img src="resources/buy-default-yellow-small.png" alt="Buy Me A Coffee" style="height: 40px" ></a>
+<a href="https://www.buymeacoffee.com/timkmecl" target="_blank">
+<img src="/resources/buy-default-yellow-small.png" alt="Buy Me A Coffee" style={{height: "40px"}} />
+</a>
 
 
 
