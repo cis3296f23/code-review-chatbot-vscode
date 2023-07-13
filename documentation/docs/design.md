@@ -11,7 +11,6 @@ Go check out Microsoft's [extension anatomy](https://code.visualstudio.com/api/g
 
 ```mermaid
 classDiagram
-
 class activate ~Function~{
 const vscode.WorkspaceConfiguration config = 'chatgpt'
 const ChatGPTViewProvider provider = context.extensionUri
@@ -37,18 +36,12 @@ deactivate()
 }
 class vscode
 class chatgpt
-`src/extension.ts` ..> vscode : imports
-`src/extension.ts` ..> chatgpt : imports
-`src/extension.ts` --> AuthInfo : has
-`src/extension.ts` --> Settings : has
-`src/extension.ts` --> activate : has
+`src/extension.ts` --> activate 
 class ChatGPTViewProvider {
 +ChatGPTViewProviderViewType viewType$
     - vscode.WebviewView? _view
-
 	- ChatGPTAPI? _chatGPTAPI
 	- any? _conversation
-
 	- string? _response
 	- string? _prompt
 	- string? _fullPrompt
@@ -65,11 +58,12 @@ class ChatGPTViewProvider {
 	+ async search(prompt?:string) Promise<void>
 	- _getHtmlForWebview(webview: vscode.Webview) string
 }
-ChatGPTViewProvider ..|> `vscode.WebviewViewProvider`
-ChatGPTViewProvider ..> Settings
-ChatGPTViewProvider ..> AuthInfo
-`vscode.WebviewViewProvider` -- vscode
-activate --> ChatGPTViewProvider
+ChatGPTViewProvider --|> `vscode.WebviewViewProvider`
+ChatGPTViewProvider ..> chatgpt
+ChatGPTViewProvider --> Settings
+ChatGPTViewProvider --> AuthInfo
+`vscode.WebviewViewProvider` --> vscode
+activate ..> ChatGPTViewProvider
 ```
 **Figure 1. VSCode Extension UML class diagram**
 Representing the current structure of the VSCode extension is a bit messy and difficult. However, it is worth it to highlight that extension.ts `activate()` registers the view provider `ChatGPTViewProvider`. The provider makes all of the calls to the ChatGPT library from the `search()` function which also updates the `webview`.
