@@ -243,7 +243,7 @@
   "scripts": {
     "vscode:prepublish": "yarn run package",
     "compile": "yarn run build && webpack --mode production",
-    "watch": "concurrently \"yarn build\" webpack --watch",
+    "watch": "concurrently \"yarn dev\" webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
@@ -251,7 +251,7 @@
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
     "update-package-lock": "npm install --package-lock-only",
-    "dev": "cd review-bot-components && vite",
+    "dev": "cd review-bot-components && vite build -w",
     "build": "cd review-bot-components && tsc && vite build"
   },
   "devDependencies": {
