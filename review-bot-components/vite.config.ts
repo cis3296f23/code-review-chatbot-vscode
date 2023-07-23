@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build:{
     outDir:'../dist',
+    watch:{},
     assetFileNames: {
       css: `assets/[name].css`,
       js: `js/[name].js`,
