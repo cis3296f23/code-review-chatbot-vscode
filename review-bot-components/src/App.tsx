@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import showdown from 'showdown';
 import microlight from 'microlight';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import './App.css'
+import {TextField} from "@mui/material";
 
 type WebviewEvent = {
     data: {
@@ -11,6 +13,11 @@ type WebviewEvent = {
     };
 };
 
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
 function App() {
     const vscode = (window as any).acquireVsCodeApi();
 
@@ -104,11 +111,12 @@ function App() {
 
 
     return (
-        <>
+        <ThemeProvider theme={darkTheme}>
             {/* This is just a placeholder. You can add more JSX code as per your actual component requirement */}
-            <input id="prompt-input" onKeyUp={handlePromptInput} />
+            <h1>Code Review Bot</h1>
             <div id="response"></div>
-        </>
+            <TextField id="prompt-input" label="Ask ChatGPT" onKeyUp={handlePromptInput} variant="outlined"/>
+        </ThemeProvider>
   )
 }
 
