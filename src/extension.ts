@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register the commands that can be called from the extension's package.json
 	context.subscriptions.push(
-		vscode.commands.registerCommand('chatgpt.ask', () => 
+		vscode.commands.registerCommand('chatgpt.ask', () =>
 			vscode.window.showInputBox({ prompt: 'What do you want to do?' })
 			.then((value) => provider.search(value))
 		),
@@ -71,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 			provider.setSettings({ apiUrl: url });
 		} else if (event.affectsConfiguration('chatgpt.model')) {
 			const config = vscode.workspace.getConfiguration('chatgpt');
-			provider.setSettings({ model: config.get('model') || 'gpt-3.5-turbo' }); 
+			provider.setSettings({ model: config.get('model') || 'gpt-3.5-turbo' });
 		} else if (event.affectsConfiguration('chatgpt.selectedInsideCodeblock')) {
 			const config = vscode.workspace.getConfiguration('chatgpt');
 			provider.setSettings({ selectedInsideCodeblock: config.get('selectedInsideCodeblock') || false });
@@ -122,7 +122,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 	constructor(private readonly _extensionUri: vscode.Uri) {
 
 	}
-	
+
 	// Set the API key and create a new API instance based on this key
 	public setAuthenticationInfo(authInfo: AuthInfo) {
 		this._authInfo = authInfo;
@@ -150,7 +150,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 		console.log("New API");
 		if (!this._authInfo || !this._settings?.apiUrl) {
 			console.warn("API key or API URL not set, please go to extension settings (read README.md for more info)");
-		}else{	
+		}else{
 			this._chatGPTAPI = new ChatGPTAPI({
 				apiKey: this._authInfo.apiKey || "xx",
 				apiBaseUrl: this._settings.apiUrl,
@@ -233,7 +233,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 		} else {
 			this._view?.show?.(true);
 		}
-		
+
 		let response = '';
 		this._response = '';
 		// Get the selected text of the active editor
@@ -256,7 +256,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 			searchPrompt = prompt;
 		}
 		this._fullPrompt = searchPrompt;
-		
+
 		// Increment the message number
 		this._currentMessageNumber++;
 		let currentMessageNumber = this._currentMessageNumber;
@@ -266,7 +266,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 		} else {
 			// If successfully signed in
 			console.log("sendMessage");
-			
+
 			// Make sure the prompt is shown
 			this._view?.webview.postMessage({ type: 'setPrompt', value: this._prompt });
 			this._view?.webview.postMessage({ type: 'addResponse', value: '...' });
@@ -335,15 +335,17 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
 
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist','assets', 'index-8e2d10f4.js'));
 		const microlightUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'microlight.min.js'));
 		const tailwindUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'showdown.min.js'));
 		const showdownUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'scripts', 'tailwind.min.js'));
 
+		const nonce = getNonce();
+
 		return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
-				<meta charset="UTF-8">
+				<meta charset="UTF-8"> 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<script src="${tailwindUri}"></script>
 				<script src="${showdownUri}"></script>
@@ -367,12 +369,8 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 				</style>
 			</head>
 			<body>
-				<input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT something" id="prompt-input" />
-				
-				<div id="response" class="pt-4 text-sm">
-				</div>
-
-				<script src="${scriptUri}"></script>
+				<div id="root"></div>
+				<script type="module" nonce="${nonce}" crossorigin src="${scriptUri}"></script>
 			</body>
 			</html>`;
 	}
@@ -380,3 +378,12 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
+
+function getNonce() {
+	let text = "";
+	const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	for (let i = 0; i < 32; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
+}
