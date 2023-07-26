@@ -242,24 +242,29 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
+    "compile": "yarn run build && webpack --mode production",
+    "watch": "concurrently \"yarn dev\" webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "update-package-lock": "npm install --package-lock-only"
+    "update-package-lock": "npm install --package-lock-only",
+    "dev": "cd views && vite build -w",
+    "build": "cd views && tsc && vite build"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
+    "@types/microlight": "^0.0.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
+    "@types/showdown": "^2.0.1",
     "@types/vscode": "^1.73.0",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.0",
+    "concurrently": "^8.2.0",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
     "mocha": "^10.1.0",
@@ -269,8 +274,27 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.1",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
     "chatgpt": "^5.2.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
     "gpt3-tokenizer": "^1.1.5",
-    "node-fetch": "^3.3.0"
+    "html-webpack-plugin": "^5.5.3",
+    "microlight": "^0.0.7",
+    "mui": "^0.0.1",
+    "node-fetch": "^3.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "showdown": "^2.1.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }
