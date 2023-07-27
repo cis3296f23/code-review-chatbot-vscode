@@ -53,6 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 		),
 		vscode.commands.registerCommand('chatgpt.explain', () => commandHandler('promptPrefix.explain')),
 		vscode.commands.registerCommand('chatgpt.refactor', () => commandHandler('promptPrefix.refactor')),
+		vscode.commands.registerCommand('chatgpt.review', () => commandHandler('promptPrefix.review')),
 		vscode.commands.registerCommand('chatgpt.optimize', () => commandHandler('promptPrefix.optimize')),
 		vscode.commands.registerCommand('chatgpt.findProblems', () => commandHandler('promptPrefix.findProblems')),
 		vscode.commands.registerCommand('chatgpt.documentation', () => commandHandler('promptPrefix.documentation')),
@@ -220,7 +221,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 		this._prompt = prompt;
 		if (!prompt) {
 			prompt = '';
-		};
+		}
 
 		// Check if the ChatGPTAPI instance is defined
 		if (!this._chatGPTAPI) {
@@ -242,7 +243,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 		// Get the language id of the selected text of the active editor
 		// If a user does not want to append this information to their prompt, leave it as an empty string
 		const languageId = (this._settings.codeblockWithLanguageId ? vscode.window.activeTextEditor?.document?.languageId : undefined) || "";
-		let searchPrompt = '';
+		let searchPrompt;
 
 		if (selection && selectedText) {
 			// If there is a selection, add the prompt and the selected text to the search prompt
@@ -367,6 +368,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 					font-weight: bold !important;
 				}
 				</style>
+				<title>Code Review Bot</title>
 			</head>
 			<body>
 				<div id="root"></div>
